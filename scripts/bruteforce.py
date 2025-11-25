@@ -1,5 +1,11 @@
 import itertools as it
-from utils import parse_csv, calculate_total_cost, calculate_total_profit, ACTIONS_PATH
+from utils import (
+    parse_csv,
+    calculate_total_cost,
+    calculate_total_profit,
+    execution_time,
+    ACTIONS_PATH,
+)
 
 """
 Contraintes:
@@ -13,6 +19,7 @@ Objectif:
 """
 
 
+@execution_time
 def bruteforce(actions=parse_csv(ACTIONS_PATH), budget=500):
     # Créer une chaine de toutes les possibilités de combinaisons allant de 1 à 20 actions
     all_combinations = it.chain.from_iterable(
@@ -32,4 +39,10 @@ def bruteforce(actions=parse_csv(ACTIONS_PATH), budget=500):
 
 
 result = bruteforce()
-print(result)
+print(
+    f"""
+Budget dépensé: {result[1]} €
+Profit total après 2 ans: {result[2]} €
+Actions achetées: {[action[0] for action in result[0]]}
+"""
+)

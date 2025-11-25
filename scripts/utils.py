@@ -1,6 +1,10 @@
 import csv
+import time
 
-ACTIONS_PATH = "liste_actions.csv"
+
+ACTIONS_PATH = "data/liste_actions.csv"
+DATASET_1_PATH = "data/dataset_1.csv"
+DATASET_2_PATH = "data/dataset_2.csv"
 
 
 def calculate_profit(action):
@@ -16,7 +20,7 @@ def parse_csv(file_path):
     with open(file_path, mode="r", newline="", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # Skip header
-        return [tuple([row[0], int(row[1]), calculate_profit(row)]) for row in reader]
+        return [tuple([row[0], float(row[1]), calculate_profit(row)]) for row in reader]
 
 
 def calculate_total_profit(action_combination):
@@ -33,3 +37,19 @@ def calculate_total_cost(action_combination):
     for action in action_combination:
         total_cost += float(action[1])
     return total_cost
+
+
+def execution_time(func):
+    """Decorator to measure and display the execution time of a function."""
+
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        execution_duration = end_time - start_time
+        print(
+            f"Temps d'exécution de {func.__name__}: {execution_duration:.5f} secondes"
+        )
+        return result
+
+    return wrapper

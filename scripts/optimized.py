@@ -1,4 +1,12 @@
-from utils import parse_csv, calculate_total_cost, calculate_total_profit, ACTIONS_PATH
+from utils import (
+    parse_csv,
+    calculate_total_cost,
+    calculate_total_profit,
+    execution_time,
+    ACTIONS_PATH,
+    DATASET_1_PATH,
+    DATASET_2_PATH,
+)
 
 """
 Contraintes:
@@ -12,12 +20,15 @@ Objectif:
 """
 
 
+@execution_time
 def greedy_algo(actions=parse_csv(ACTIONS_PATH), budget=500):
     # Utiliser l'algorithme du sac à dos pour avoir une solution proche de la meilleur solution
 
+    # filtrer les actions avec un cout negatif ou nul
+    actions = [action for action in actions if action[2] > 0]
+
     # Tri par rentabilité : Profit / Coût
     actions = sorted(actions, key=lambda action: action[2] / action[1], reverse=True)
-    print(actions)
 
     combinations = []
 
@@ -33,5 +44,14 @@ def greedy_algo(actions=parse_csv(ACTIONS_PATH), budget=500):
     )
 
 
-result = greedy_algo()
-print(result)
+for dataset_path in [DATASET_1_PATH, DATASET_2_PATH]:
+    print(f"Résultats pour le fichier : {dataset_path}")
+    result = greedy_algo(actions=parse_csv(dataset_path))
+
+    print(
+        f"""
+    Budget dépensé: {result[1]} €
+    Profit total après 2 ans: {result[2]} €
+    Actions achetées: {[action[0] for action in result[0]]}
+    """
+    )
